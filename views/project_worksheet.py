@@ -1,10 +1,11 @@
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QTableWidget, QTableWidgetItem,
-    QComboBox, QPushButton, QMessageBox
-)
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QMessageBox,
+                               QPushButton, QTableWidget, QTableWidgetItem,
+                               QVBoxLayout, QWidget)
+
 from database import SessionLocal
-from logic import get_projects, get_project_parts
+from logic import get_project_parts, get_projects
+
 
 class ProjectWorksheetWidget(QWidget):
     def __init__(self):
@@ -44,7 +45,13 @@ class ProjectWorksheetWidget(QWidget):
         self.parts_table = QTableWidget()
         self.parts_table.setColumnCount(5)
         self.parts_table.setHorizontalHeaderLabels(
-            ["Materjali ID", "Materjali Nimi", "Vajalik Kogus", "Tüüp", "Materjali Tüüp"]
+            [
+                "Materjali ID",
+                "Materjali Nimi",
+                "Vajalik Kogus",
+                "Tüüp",
+                "Materjali Tüüp",
+            ]
         )
         layout.addWidget(self.parts_table)
         self.parts_table.resizeColumnsToContents()
@@ -67,7 +74,9 @@ class ProjectWorksheetWidget(QWidget):
                 QMessageBox.information(self, "Teade", "Projekte ei leitud.")
                 return
             for project in projects:
-                self.project_combo.addItem(f"{project.name} - {project.description}", project.id)
+                self.project_combo.addItem(
+                    f"{project.name} - {project.description}", project.id
+                )
 
     def reset_view(self):
         """Tühjendab tabeli ja nupud, kui projekt muutub."""
@@ -92,6 +101,7 @@ class ProjectWorksheetWidget(QWidget):
 
             for i, part in enumerate(parts):
                 m = part.material
+
                 def create_item(value):
                     item = QTableWidgetItem(str(value))
                     item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
@@ -113,16 +123,20 @@ class ProjectWorksheetWidget(QWidget):
             return
 
         name, desc = self.project_combo.currentText().split(" - ")
-        filename = f"projekti_tööleht_{name.replace(' ', '_')}_{self.current_project_id}.txt"
+        filename = (
+            f"projekti_tööleht_{name.replace(' ', '_')}_{self.current_project_id}.txt"
+        )
 
         header = (
             f"Projekti Number: {self.current_project_id}\n"
             f"Projekti Nimi: {name}\n"
             f"Kirjeldus: {desc}\n\n"
             f"Vajalikud Osad:\n"
-            + "-" * 70 + "\n"
+            + "-" * 70
+            + "\n"
             + f"{'Materjali ID':<15} {'Materjali Nimi':<25} {'Vajalik Kogus':<15} {'Tüüp':<10} {'Materjali Tüüp':<15}\n"
-            + "-" * 70 + "\n"
+            + "-" * 70
+            + "\n"
         )
 
         with SessionLocal() as db:
@@ -139,4 +153,6 @@ class ProjectWorksheetWidget(QWidget):
                 f.write(content)
             QMessageBox.information(self, "Edukas", f"Tööleht salvestatud: {filename}")
         except Exception as e:
-            QMessageBox.critical(self, "Viga", f"Töölehe salvestamine ebaõnnestus: {str(e)}")
+            QMessageBox.critical(
+                self, "Viga", f"Töölehe salvestamine ebaõnnestus: {str(e)}"
+            )

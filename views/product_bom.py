@@ -1,25 +1,16 @@
-from PySide6.QtWidgets import (
-    QDialog,
-    QVBoxLayout,
-    QHBoxLayout,
-    QListWidget,
-    QListWidgetItem,
-    QLabel,
-    QPushButton,
-    QSpinBox,
-    QWidget,
-)
+from PySide6.QtWidgets import (QDialog, QHBoxLayout, QLabel, QListWidget,
+                               QListWidgetItem, QPushButton, QSpinBox,
+                               QVBoxLayout, QWidget)
+
 from database import SessionLocal
-from logic import (
-    get_materials,
-    get_product_parts,
-    add_material_to_product,
-    remove_material_from_product,
-)
+from logic import (add_material_to_product, get_materials, get_product_parts,
+                   remove_material_from_product)
 
 
 class ProductBOMDialog(QDialog):
-    def __init__(self, product_id: int, product_name: str, parent: QWidget | None = None):
+    def __init__(
+        self, product_id: int, product_name: str, parent: QWidget | None = None
+    ):
         super().__init__(parent)
         self.product_id = product_id
         self.setWindowTitle(f"BOM – {product_name}")
@@ -82,9 +73,7 @@ class ProductBOMDialog(QDialog):
             # bom
             self.bom_list.clear()
             for pp in get_product_parts(db, self.product_id):
-                itm = QListWidgetItem(
-                    f"{pp.material.name}  x {pp.quantity_required}"
-                )
+                itm = QListWidgetItem(f"{pp.material.name}  x {pp.quantity_required}")
                 itm.setData(0x0100, pp.id)
                 self.bom_list.addItem(itm)
 

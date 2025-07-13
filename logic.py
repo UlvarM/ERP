@@ -1,16 +1,11 @@
 from datetime import datetime
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from models import (
-    Category,
-    Product,
-    Material,
-    ProductParts,
-    Project,
-    ProjectParts,
-    History,
-)
+from models import (Category, History, Material, Product, ProductParts,
+                    Project, ProjectParts)
+
 
 # ───────── categories ─────────
 def get_categories(db: Session):
@@ -40,6 +35,7 @@ def assign_product_categories(db: Session, product: Product, names: list[str]):
     db.commit()
     db.refresh(product)
     return product
+
 
 # ───────── products ─────────
 def get_products(db: Session, category_names: list[str] | None = None):
@@ -94,6 +90,7 @@ def delete_product(db: Session, pid: int):
         db.delete(p)
         db.commit()
 
+
 # ───────── product BOM ─────────
 def get_product_parts(db: Session, product_id: int):
     return (
@@ -128,6 +125,7 @@ def remove_material_from_product(db: Session, part_id: int):
     if pp:
         db.delete(pp)
         db.commit()
+
 
 # ────────────── MATERIALS ──────────────
 def get_materials(db: Session):
@@ -201,6 +199,7 @@ def delete_material(db: Session, material_id: int):
     if m:
         db.delete(m)
         db.commit()
+
 
 # ────────────── PROJECTS ──────────────
 def get_projects(db: Session):
@@ -288,6 +287,7 @@ def delete_project(db: Session, project_id: int):
         db.delete(p)
         db.commit()
 
+
 # ────────────── STOCK DEDUCTION ──────────────
 def start_project_deduct_inventory(db: Session, project_id: int):
     project = db.query(Project).filter_by(id=project_id).first()
@@ -297,7 +297,9 @@ def start_project_deduct_inventory(db: Session, project_id: int):
     for prt in parts:
         mat = db.query(Material).filter_by(id=prt.material_id).first()
         if mat is None or mat.stock_qty < prt.quantity_required:
-            raise ValueError(f"Insufficient stock for {mat.name if mat else prt.material_id}")
+            raise ValueError(
+                f"Insufficient stock for {mat.name if mat else prt.material_id}"
+            )
 
     for prt in parts:
         mat = db.query(Material).filter_by(id=prt.material_id).first()
@@ -311,6 +313,7 @@ def start_project_deduct_inventory(db: Session, project_id: int):
         )
     db.commit()
     return True
+
 
 # ────────────── HISTORY ──────────────
 def get_history(db: Session):

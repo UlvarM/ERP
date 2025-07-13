@@ -1,19 +1,16 @@
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton,
-    QTableWidget, QTableWidgetItem, QSpinBox, QMessageBox, QTabWidget, QComboBox
-)
-from PySide6.QtCore import Qt
 from functools import partial
 
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QLineEdit,
+                               QMessageBox, QPushButton, QSpinBox,
+                               QTableWidget, QTableWidgetItem, QTabWidget,
+                               QVBoxLayout, QWidget)
+
 from database import SessionLocal
-from logic import (
-    get_materials,
-    create_material,
-    update_material_details,
-    delete_material,
-    add_history_entry,
-    get_material_by_name,
-)
+from logic import (add_history_entry, create_material, delete_material,
+                   get_material_by_name, get_materials,
+                   update_material_details)
+
 
 class AddDetailsWidget(QWidget):
     def __init__(self):
@@ -117,8 +114,18 @@ class AddDetailsWidget(QWidget):
         self.table = QTableWidget()
         self.table.setColumnCount(10)
         self.table.setHorizontalHeaderLabels(
-            ["ID", "Name", "Stock", "Mat.", "Profile",
-             "Len", "Qty", "Dim", "Thick", "Del"]
+            [
+                "ID",
+                "Name",
+                "Stock",
+                "Mat.",
+                "Profile",
+                "Len",
+                "Qty",
+                "Dim",
+                "Thick",
+                "Del",
+            ]
         )
         lay.addWidget(self.table)
         return w
@@ -150,7 +157,9 @@ class AddDetailsWidget(QWidget):
                 name=name,
                 stock_qty=self.stock_spin.value(),
                 type="tube" if tube else "general",
-                material_type=self.material_type_combo.currentText().lower() if tube else None,
+                material_type=(
+                    self.material_type_combo.currentText().lower() if tube else None
+                ),
                 tube_profile=self.profile_combo.currentText().lower() if tube else None,
                 tube_length=self.tube_len_spin.value() if tube else None,
                 tube_quantity=self.tube_qty_spin.value() if tube else None,
@@ -172,19 +181,29 @@ class AddDetailsWidget(QWidget):
                 self.table.setItem(r, 0, QTableWidgetItem(str(m.id)))
                 self.table.setItem(r, 1, QTableWidgetItem(m.name))
 
-                stock_spin = QSpinBox(); stock_spin.setMaximum(99999); stock_spin.setValue(m.stock_qty)
+                stock_spin = QSpinBox()
+                stock_spin.setMaximum(99999)
+                stock_spin.setValue(m.stock_qty)
                 self.table.setCellWidget(r, 2, stock_spin)
 
-                mat_combo = QComboBox(); mat_combo.addItems(["aluminium", "steel", "stainless"])
-                if m.material_type: mat_combo.setCurrentText(m.material_type)
+                mat_combo = QComboBox()
+                mat_combo.addItems(["aluminium", "steel", "stainless"])
+                if m.material_type:
+                    mat_combo.setCurrentText(m.material_type)
                 self.table.setCellWidget(r, 3, mat_combo)
 
-                prof_combo = QComboBox(); prof_combo.addItems(["nelikanttoru", "ümartoru"])
-                if m.tube_profile: prof_combo.setCurrentText(m.tube_profile)
+                prof_combo = QComboBox()
+                prof_combo.addItems(["nelikanttoru", "ümartoru"])
+                if m.tube_profile:
+                    prof_combo.setCurrentText(m.tube_profile)
                 self.table.setCellWidget(r, 4, prof_combo)
 
-                len_spin = QSpinBox(); len_spin.setMaximum(10000); len_spin.setValue(m.tube_length or 0)
-                qty_spin = QSpinBox(); qty_spin.setMaximum(10000); qty_spin.setValue(m.tube_quantity or 0)
+                len_spin = QSpinBox()
+                len_spin.setMaximum(10000)
+                len_spin.setValue(m.tube_length or 0)
+                qty_spin = QSpinBox()
+                qty_spin.setMaximum(10000)
+                qty_spin.setValue(m.tube_quantity or 0)
                 dim_edit = QLineEdit(m.tube_dimension or "")
                 thick_edit = QLineEdit(m.tube_thickness or "")
 
@@ -197,9 +216,16 @@ class AddDetailsWidget(QWidget):
                 del_btn.clicked.connect(partial(self._delete, m.id))
                 self.table.setCellWidget(r, 9, del_btn)
 
-                save = lambda *_, mid=m.id, s=stock_spin, l=len_spin, q=qty_spin, d=dim_edit, t=thick_edit, \
-                               ma=mat_combo, pr=prof_combo: \
-                    self._save(mid, s.value(), l.value(), q.value(), d.text(), t.text(), ma.currentText(), pr.currentText())
+                save = lambda *_, mid=m.id, s=stock_spin, l=len_spin, q=qty_spin, d=dim_edit, t=thick_edit, ma=mat_combo, pr=prof_combo: self._save(
+                    mid,
+                    s.value(),
+                    l.value(),
+                    q.value(),
+                    d.text(),
+                    t.text(),
+                    ma.currentText(),
+                    pr.currentText(),
+                )
                 stock_spin.editingFinished.connect(save)
                 len_spin.editingFinished.connect(save)
                 qty_spin.editingFinished.connect(save)
@@ -210,9 +236,7 @@ class AddDetailsWidget(QWidget):
 
     def _save(self, mid, stock, length, qty, dim, thick, mat, prof):
         with SessionLocal() as db:
-            update_material_details(
-                db, mid, stock, length, qty, dim, thick, prof, mat
-            )
+            update_material_details(db, mid, stock, length, qty, dim, thick, prof, mat)
             add_history_entry(db, "Edit", f"id {mid}")
 
     def _delete(self, mid):

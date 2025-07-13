@@ -1,27 +1,23 @@
 # app.py
 
 from database import init_db
+
 init_db()
 
 import sys
-from PySide6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QStackedWidget,
-)
-from PySide6.QtCore import Qt
-from database import init_db
 
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow,
+                               QPushButton, QStackedWidget, QVBoxLayout,
+                               QWidget)
+
+from database import init_db
+from views.add_details import AddDetailsWidget  # ladu
+from views.history import HistoryWidget  # ajalugu
+from views.manage_projects import ManageProjectsWidget  # tootmisplaan
 # vaated
 from views.overview import OverviewWidget
-from views.manage_projects import ManageProjectsWidget     # tootmisplaan
-from views.tooted import ProductsWidget                    # tooted
-from views.add_details import AddDetailsWidget             # ladu
-from views.history import HistoryWidget                    # ajalugu
+from views.tooted import ProductsWidget  # tooted
 
 
 class MainWindow(QMainWindow):
@@ -47,20 +43,20 @@ class MainWindow(QMainWindow):
 
         # ---------- vaated ----------
         self.views = {
-            "overview":        OverviewWidget(),
+            "overview": OverviewWidget(),
             "production_plan": ManageProjectsWidget(),
-            "products":        ProductsWidget(),
-            "warehouse":       AddDetailsWidget(),
-            "history":         HistoryWidget(),
+            "products": ProductsWidget(),
+            "warehouse": AddDetailsWidget(),
+            "history": HistoryWidget(),
         }
 
         # ---------- nupud ----------
         buttons = [
-            ("Ülevaade",      "overview"),
-            ("Tootmisplaan",  "production_plan"),
-            ("Tooted",        "products"),
-            ("Ladu",          "warehouse"),
-            ("Ajalugu",       "history"),
+            ("Ülevaade", "overview"),
+            ("Tootmisplaan", "production_plan"),
+            ("Tooted", "products"),
+            ("Ladu", "warehouse"),
+            ("Ajalugu", "history"),
         ]
 
         for label, key in buttons:
@@ -89,7 +85,7 @@ def main():
     init_db()
     app = QApplication(sys.argv)
     win = MainWindow()
-    win.show()          # kuva aken
+    win.show()  # kuva aken
     sys.exit(app.exec())
 
 

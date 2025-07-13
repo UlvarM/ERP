@@ -1,27 +1,40 @@
 # views/manage_projects.py
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox,
-    QTableWidget, QTableWidgetItem, QPushButton, QMessageBox, QTabWidget
-)
-from PySide6.QtCore import Qt
 from PySide6 import QtGui
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QLineEdit,
+                               QMessageBox, QPushButton, QTableWidget,
+                               QTableWidgetItem, QTabWidget, QVBoxLayout,
+                               QWidget)
+
 from database import SessionLocal
-from logic import get_projects, update_project_field, delete_project
+from logic import delete_project, get_projects, update_project_field
 from views.add_project import AddProjectWidget
 
 STATUS_VALUES = ["-", "Ootel", "Töös", "Valmis"]
 FIELDS = [
-    "delivery", "customer", "order_number", "product", "notes", "quantity",
-    "afterone", "cutting", "laser", "bending", "drilling",
-    "welding", "grinding", "coating", "delivered",
+    "delivery",
+    "customer",
+    "order_number",
+    "product",
+    "notes",
+    "quantity",
+    "afterone",
+    "cutting",
+    "laser",
+    "bending",
+    "drilling",
+    "welding",
+    "grinding",
+    "coating",
+    "delivered",
 ]
 DEL_COL = len(FIELDS) + 1
 IND_COL = len(FIELDS) + 2
 COLOR_MAP = {
     "Valmis": "#8BC34A",
-    "Töös":   "#FFEB3B",
-    "Ootel":  "#F44336",
-    "-":      "#F44336",
+    "Töös": "#FFEB3B",
+    "Ootel": "#F44336",
+    "-": "#F44336",
 }
 
 
@@ -63,10 +76,26 @@ class ManageProjectsWidget(QWidget):
         self.table = QTableWidget()
         self.table.setColumnCount(len(FIELDS) + 3)
         self.table.setHorizontalHeaderLabels(
-            ["ID", "Tarne", "Tellija", "Tellimuse nr", "Toode", "Märkus", "Kogus",
-             "Afterone", "Lõikus", "Laser", "Painutus", "Puurimine",
-             "Keevitus", "Lihvimine", "Pinnatöötlus", "Tarnitud",
-             "Del", "Ind"]
+            [
+                "ID",
+                "Tarne",
+                "Tellija",
+                "Tellimuse nr",
+                "Toode",
+                "Märkus",
+                "Kogus",
+                "Afterone",
+                "Lõikus",
+                "Laser",
+                "Painutus",
+                "Puurimine",
+                "Keevitus",
+                "Lihvimine",
+                "Pinnatöötlus",
+                "Tarnitud",
+                "Del",
+                "Ind",
+            ]
         )
         self.table.itemChanged.connect(self._on_item_changed)
         lay.addWidget(self.table)
@@ -74,7 +103,9 @@ class ManageProjectsWidget(QWidget):
         # ---- LISA TELLIMUS -------------------------------------------------
         add_tab = AddProjectWidget()
         self.tabs.addTab(add_tab, "Lisa tellimus")
-        self.tabs.currentChanged.connect(lambda idx: self.refresh() if idx == 0 else None)
+        self.tabs.currentChanged.connect(
+            lambda idx: self.refresh() if idx == 0 else None
+        )
 
         self.refresh()
 
@@ -90,12 +121,23 @@ class ManageProjectsWidget(QWidget):
         need = self.status_filter.currentText()
 
         def show(p):
-            if term and term not in (p.customer or "").lower() and term not in (p.product or "").lower():
+            if (
+                term
+                and term not in (p.customer or "").lower()
+                and term not in (p.product or "").lower()
+            ):
                 return False
             if need != "Kõik":
                 if need not in (
-                    p.afterone, p.cutting, p.laser, p.bending,
-                    p.drilling, p.welding, p.grinding, p.coating, p.delivered,
+                    p.afterone,
+                    p.cutting,
+                    p.laser,
+                    p.bending,
+                    p.drilling,
+                    p.welding,
+                    p.grinding,
+                    p.coating,
+                    p.delivered,
                 ):
                     return False
             return True
@@ -106,21 +148,32 @@ class ManageProjectsWidget(QWidget):
         for r, p in enumerate(rows):
             self._set(r, 0, p.id, lock=True)
             plain = [
-                p.delivery, p.customer, p.order_number, p.product,
-                p.notes, p.quantity,
+                p.delivery,
+                p.customer,
+                p.order_number,
+                p.product,
+                p.notes,
+                p.quantity,
             ]
             for i, v in enumerate(plain, 1):
                 self._set(r, i, v)
 
             stats = [
-                p.afterone, p.cutting, p.laser, p.bending,
-                p.drilling, p.welding, p.grinding, p.coating, p.delivered,
+                p.afterone,
+                p.cutting,
+                p.laser,
+                p.bending,
+                p.drilling,
+                p.welding,
+                p.grinding,
+                p.coating,
+                p.delivered,
             ]
             for i, v in enumerate(stats, 7):
                 self._status(r, i, v)
 
             d = QPushButton("X")
-            d.setFixedSize(28, 28)           # väiksem del-nupp
+            d.setFixedSize(28, 28)  # väiksem del-nupp
             d.clicked.connect(lambda _, pid=p.id: self._delete(pid))
             self.table.setCellWidget(r, DEL_COL, d)
 
@@ -141,7 +194,9 @@ class ManageProjectsWidget(QWidget):
         cmb.addItems(STATUS_VALUES)
         if val in STATUS_VALUES:
             cmb.setCurrentText(val)
-        cmb.currentTextChanged.connect(lambda v, r=row, c=col: self._commit_status(r, c, v))
+        cmb.currentTextChanged.connect(
+            lambda v, r=row, c=col: self._commit_status(r, c, v)
+        )
         cmb.setMinimumHeight(28)
         self.table.setCellWidget(row, col, cmb)
 
@@ -169,8 +224,12 @@ class ManageProjectsWidget(QWidget):
             self._indicator(row, val)
 
     def _delete(self, pid):
-        if QMessageBox.question(self, "Kinnitus", "Kustuta projekt?",
-                                QMessageBox.Yes | QMessageBox.No) != QMessageBox.Yes:
+        if (
+            QMessageBox.question(
+                self, "Kinnitus", "Kustuta projekt?", QMessageBox.Yes | QMessageBox.No
+            )
+            != QMessageBox.Yes
+        ):
             return
         with SessionLocal() as db:
             delete_project(db, pid)

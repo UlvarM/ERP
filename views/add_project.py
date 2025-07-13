@@ -1,25 +1,11 @@
 from PySide6.QtCore import QEvent
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QPushButton,
-    QComboBox,
-    QSpinBox,
-    QMessageBox,
-    QTabWidget,
-    QApplication,
-)
+from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QLabel,
+                               QLineEdit, QMessageBox, QPushButton, QSpinBox,
+                               QTabWidget, QTextEdit, QVBoxLayout, QWidget)
+
 from database import SessionLocal
-from logic import (
-    create_project,
-    add_history_entry,
-    get_products,
-    get_product_parts,
-)
+from logic import (add_history_entry, create_project, get_product_parts,
+                   get_products)
 from models import Product
 
 
@@ -56,10 +42,10 @@ class AddProjectWidget(QWidget):
         self.product_combo = QComboBox()
         row.addWidget(self.product_combo)
 
-        self.notes    = self._line(lay, "Märkused:")
+        self.notes = self._line(lay, "Märkused:")
         self.quantity = self._spin(lay, "Kogus:", 1, 9999)
-        self.pname    = self._line(lay, "Projekti nimi:")
-        self.desc     = self._text(lay, "Kirjeldus:")
+        self.pname = self._line(lay, "Projekti nimi:")
+        self.desc = self._text(lay, "Kirjeldus:")
 
         save = QPushButton("Salvesta")
         save.clicked.connect(self._save)
@@ -102,7 +88,9 @@ class AddProjectWidget(QWidget):
     def _refresh_products(self):
         cust = self.customer.text().strip()
         with SessionLocal() as db:
-            products = get_products(db, category_names=[cust]) if cust else get_products(db)
+            products = (
+                get_products(db, category_names=[cust]) if cust else get_products(db)
+            )
             # kui filtriga ei leitud midagi, näita kõiki,
             # et valik ei muutuks kasutamise käigus tühjaks
             if cust and not products:

@@ -1,7 +1,10 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel, QTableWidget, QTableWidgetItem
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QLabel, QTableWidget, QTableWidgetItem,
+                               QVBoxLayout, QWidget)
+
 from database import SessionLocal
 from logic import get_history
-from PySide6.QtCore import Qt
+
 
 class HistoryWidget(QWidget):
     def __init__(self):
@@ -34,14 +37,21 @@ class HistoryWidget(QWidget):
             self.history_table.setRowCount(len(history_entries))
 
             for i, entry in enumerate(history_entries):
+
                 def create_item(value):
                     item = QTableWidgetItem(str(value))
                     item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
                     return item
 
                 self.history_table.setItem(i, 0, create_item(entry.id))
-                self.history_table.setItem(i, 1, create_item(entry.timestamp.strftime("%Y-%m-%d %H:%M:%S")))
-                self.history_table.setItem(i, 2, create_item(entry.project_id if entry.project_id else "Puudub"))
+                self.history_table.setItem(
+                    i, 1, create_item(entry.timestamp.strftime("%Y-%m-%d %H:%M:%S"))
+                )
+                self.history_table.setItem(
+                    i,
+                    2,
+                    create_item(entry.project_id if entry.project_id else "Puudub"),
+                )
                 self.history_table.setItem(i, 3, create_item(entry.action))
                 self.history_table.setItem(i, 4, create_item(entry.details))
 

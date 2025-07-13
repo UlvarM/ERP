@@ -1,23 +1,11 @@
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QTextEdit,
-    QSpinBox,
-    QPushButton,
-    QTableWidget,
-    QTableWidgetItem,
-    QMessageBox,
-)
+from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QMessageBox,
+                               QPushButton, QSpinBox, QTableWidget,
+                               QTableWidgetItem, QTextEdit, QVBoxLayout,
+                               QWidget)
+
 from database import SessionLocal
-from logic import (
-    get_products,
-    create_product,
-    assign_product_categories,
-    delete_product,
-)
+from logic import (assign_product_categories, create_product, delete_product,
+                   get_products)
 from views.product_bom import ProductBOMDialog
 
 
@@ -76,12 +64,22 @@ class ProductsWidget(QWidget):
             for r, p in enumerate(products):
                 self.table.setItem(r, 0, QTableWidgetItem(str(p.id)))
                 self.table.setItem(r, 1, QTableWidgetItem(p.name))
-                self.table.setItem(r, 2, QTableWidgetItem(", ".join(c.name for c in p.categories)))
-                self.table.setItem(r, 3, QTableWidgetItem("" if p.production_time is None else str(p.production_time)))
+                self.table.setItem(
+                    r, 2, QTableWidgetItem(", ".join(c.name for c in p.categories))
+                )
+                self.table.setItem(
+                    r,
+                    3,
+                    QTableWidgetItem(
+                        "" if p.production_time is None else str(p.production_time)
+                    ),
+                )
                 self.table.setItem(r, 4, QTableWidgetItem(p.description or ""))
 
                 bom_btn = QPushButton("BOM")
-                bom_btn.clicked.connect(lambda _, pid=p.id, pn=p.name: self._open_bom(pid, pn))
+                bom_btn.clicked.connect(
+                    lambda _, pid=p.id, pn=p.name: self._open_bom(pid, pn)
+                )
                 self.table.setCellWidget(r, 5, bom_btn)
 
                 del_btn = QPushButton("X")

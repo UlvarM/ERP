@@ -1,14 +1,21 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
-from PySide6.QtCore import Qt, QEvent
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import \
+    FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from PySide6.QtCore import QEvent, Qt
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from database import SessionLocal
 from logic import get_projects
 
 STAGES = [
-    "afterone", "cutting", "laser", "bending",
-    "drilling", "welding", "grinding", "coating",
+    "afterone",
+    "cutting",
+    "laser",
+    "bending",
+    "drilling",
+    "welding",
+    "grinding",
+    "coating",
 ]
 WAIT_SET = {"-", "Ootel"}
 PROGRESS_VALUE = "Töös"
@@ -31,10 +38,10 @@ class OverviewWidget(QWidget):
         # KPI-riba
         kpi_row = QHBoxLayout()
         root.addLayout(kpi_row)
-        self.lbl_total     = self._kpi("Projektid kokku", kpi_row)
-        self.lbl_delivered = self._kpi("Tarnitud",        kpi_row)
-        self.lbl_progress  = self._kpi("Töös",            kpi_row)
-        self.lbl_waiting   = self._kpi("Ootel",           kpi_row)
+        self.lbl_total = self._kpi("Projektid kokku", kpi_row)
+        self.lbl_delivered = self._kpi("Tarnitud", kpi_row)
+        self.lbl_progress = self._kpi("Töös", kpi_row)
+        self.lbl_waiting = self._kpi("Ootel", kpi_row)
 
         # Staatusediagramm
         self.fig = Figure(figsize=(8, 4))
@@ -118,7 +125,16 @@ class OverviewWidget(QWidget):
 
         ax.set_xticks(list(x))
         ax.set_xticklabels(
-            ["After1", "Lõikus", "Laser", "Painutus", "Puurim.", "Keevitus", "Lihv.", "Pinnat."],
+            [
+                "After1",
+                "Lõikus",
+                "Laser",
+                "Painutus",
+                "Puurim.",
+                "Keevitus",
+                "Lihv.",
+                "Pinnat.",
+            ],
             rotation=30,
             ha="right",
         )

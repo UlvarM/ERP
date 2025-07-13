@@ -6,14 +6,9 @@ Käivita:
 """
 
 from database import SessionLocal, engine
+from logic import (add_material_to_product, assign_product_categories,
+                   create_category, create_material, create_product)
 from models import Base
-from logic import (
-    create_material,
-    create_category,
-    create_product,
-    assign_product_categories,
-    add_material_to_product,
-)
 
 
 def run():
