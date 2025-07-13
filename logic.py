@@ -3,8 +3,15 @@ from datetime import datetime
 from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
-from models import (Category, History, Material, Product, ProductParts,
-                    Project, ProjectParts)
+from models import (
+    Category,
+    History,
+    Material,
+    Product,
+    ProductParts,
+    Project,
+    ProjectParts,
+)
 
 
 # ───────── categories ─────────

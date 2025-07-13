@@ -1,10 +1,19 @@
 # views/manage_projects.py
 from PySide6 import QtGui
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QLineEdit,
-                               QMessageBox, QPushButton, QTableWidget,
-                               QTableWidgetItem, QTabWidget, QVBoxLayout,
-                               QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import SessionLocal
 from logic import delete_project, get_projects, update_project_field

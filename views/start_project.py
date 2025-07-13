@@ -1,11 +1,24 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QMessageBox,
-                               QPushButton, QSpinBox, QTableWidget,
-                               QTableWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QSpinBox,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import SessionLocal
-from logic import (add_history_entry, get_project_parts, get_projects,
-                   start_project_deduct_inventory)
+from logic import (
+    add_history_entry,
+    get_project_parts,
+    get_projects,
+    start_project_deduct_inventory,
+)
 
 
 class StartProjectWidget(QWidget):

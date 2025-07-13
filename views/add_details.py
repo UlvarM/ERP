@@ -1,15 +1,30 @@
 from functools import partial
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QComboBox, QHBoxLayout, QLabel, QLineEdit,
-                               QMessageBox, QPushButton, QSpinBox,
-                               QTableWidget, QTableWidgetItem, QTabWidget,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QSpinBox,
+    QTableWidget,
+    QTableWidgetItem,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import SessionLocal
-from logic import (add_history_entry, create_material, delete_material,
-                   get_material_by_name, get_materials,
-                   update_material_details)
+from logic import (
+    add_history_entry,
+    create_material,
+    delete_material,
+    get_material_by_name,
+    get_materials,
+    update_material_details,
+)
 
 
 class AddDetailsWidget(QWidget):

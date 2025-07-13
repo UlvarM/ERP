@@ -1,11 +1,21 @@
 from PySide6.QtCore import QEvent
-from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QLabel,
-                               QLineEdit, QMessageBox, QPushButton, QSpinBox,
-                               QTabWidget, QTextEdit, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QSpinBox,
+    QTabWidget,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import SessionLocal
-from logic import (add_history_entry, create_project, get_product_parts,
-                   get_products)
+from logic import add_history_entry, create_project, get_product_parts, get_products
 from models import Product
 
 

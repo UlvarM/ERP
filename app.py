@@ -7,14 +7,21 @@ init_db()
 import sys
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QMainWindow,
-                               QPushButton, QStackedWidget, QVBoxLayout,
-                               QWidget)
+from PySide6.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QMainWindow,
+    QPushButton,
+    QStackedWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import init_db
 from views.add_details import AddDetailsWidget  # ladu
 from views.history import HistoryWidget  # ajalugu
 from views.manage_projects import ManageProjectsWidget  # tootmisplaan
+
 # vaated
 from views.overview import OverviewWidget
 from views.tooted import ProductsWidget  # tooted

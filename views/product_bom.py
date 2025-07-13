@@ -1,10 +1,22 @@
-from PySide6.QtWidgets import (QDialog, QHBoxLayout, QLabel, QListWidget,
-                               QListWidgetItem, QPushButton, QSpinBox,
-                               QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import SessionLocal
-from logic import (add_material_to_product, get_materials, get_product_parts,
-                   remove_material_from_product)
+from logic import (
+    add_material_to_product,
+    get_materials,
+    get_product_parts,
+    remove_material_from_product,
+)
 
 
 class ProductBOMDialog(QDialog):

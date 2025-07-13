@@ -1,11 +1,24 @@
-from PySide6.QtWidgets import (QHBoxLayout, QLabel, QLineEdit, QMessageBox,
-                               QPushButton, QSpinBox, QTableWidget,
-                               QTableWidgetItem, QTextEdit, QVBoxLayout,
-                               QWidget)
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QSpinBox,
+    QTableWidget,
+    QTableWidgetItem,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
+)
 
 from database import SessionLocal
-from logic import (assign_product_categories, create_product, delete_product,
-                   get_products)
+from logic import (
+    assign_product_categories,
+    create_product,
+    delete_product,
+    get_products,
+)
 from views.product_bom import ProductBOMDialog
 
 
